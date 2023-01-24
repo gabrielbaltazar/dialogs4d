@@ -82,6 +82,8 @@ end;
 constructor TDialogs4DBase.Create;
 begin
   FType := dtInfo;
+  FColorPrimaryButton := $FF0696B9;
+  FColorSecondButton := $FFD45A4F;
   FOnClickPrimaryButton := nil;
   FOnClickSecondButton := nil;
   ResetValues;
@@ -126,8 +128,7 @@ end;
 procedure TDialogs4DBase.ResetValues;
 begin
   FBackgroundOpacity := 0.7;
-  FColorPrimaryButton := $FF0696B9;
-  FColorSecondButton := $FFD45A4F;
+  FTextPrimaryButton := 'OK';
   FSuccessColor := $FF35BD27; // Green
   FErrorColor := $FFE64D4D; // Red
   FQuestionColor := $FFAAAAAA; // Gray
@@ -135,7 +136,6 @@ begin
   FWarningColor := $FFF3A867; // Orange
   FTitle := EmptyStr;
   FMessage := EmptyStr;
-  FTextPrimaryButton := EmptyStr;
   FTextSecondButton := EmptyStr;
 end;
 
