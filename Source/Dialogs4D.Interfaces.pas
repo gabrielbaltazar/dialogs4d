@@ -4,6 +4,7 @@ interface
 
 uses
   FMX.Types,
+  FMX.Forms,
   System.UITypes;
 
 type
@@ -33,6 +34,32 @@ type
     function Show: IDialog4D;
   end;
 
+  IDialogLoading = interface
+    ['{958A715C-D1A1-4E63-A344-8386F225A70B}']
+    function Form(AValue: TForm): IDialogLoading;
+    function FontName(AValue: TFontName): IDialogLoading;
+    function Message(AValue: string): IDialogLoading;
+    function Show: IDialogLoading;
+    function Hide: IDialogLoading;
+  end;
+
+function NewDialog: IDialog4D;
+function NewDialogLoading: IDialogLoading;
+
 implementation
+
+uses
+  Dialogs4D.FancyDialog,
+  Dialogs4D.Loading;
+
+function NewDialog: IDialog4D;
+begin
+  Result := TDialogs4DFancyDialog.New;
+end;
+
+function NewDialogLoading: IDialogLoading;
+begin
+  Result := TDialogs4DLoading.New;
+end;
 
 end.

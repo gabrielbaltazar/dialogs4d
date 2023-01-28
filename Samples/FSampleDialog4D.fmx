@@ -16,7 +16,7 @@ object frmSampleDialog4D: TfrmSampleDialog4D
     Size.Width = 129.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 2
+    TabOrder = 3
     Text = 'Success'
     OnClick = btnSuccessClick
   end
@@ -26,11 +26,11 @@ object frmSampleDialog4D: TfrmSampleDialog4D
     Position.Y = 24.000000000000000000
     TextSettings.Font.Size = 14.000000000000000000
     Text = 'Title'
-    TabOrder = 4
+    TabOrder = 5
   end
   object edtTitle: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 6
+    TabOrder = 7
     Text = 'Message Title'
     TextSettings.Font.Size = 14.000000000000000000
     Position.X = 40.000000000000000000
@@ -42,7 +42,7 @@ object frmSampleDialog4D: TfrmSampleDialog4D
   end
   object Edit1: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 5
+    TabOrder = 6
     Text = 'Message Content'
     TextSettings.Font.Size = 14.000000000000000000
     Position.X = 192.000000000000000000
@@ -58,7 +58,7 @@ object frmSampleDialog4D: TfrmSampleDialog4D
     Position.Y = 24.000000000000000000
     TextSettings.Font.Size = 14.000000000000000000
     Text = 'Message'
-    TabOrder = 3
+    TabOrder = 4
   end
   object btnError: TButton
     Position.X = 192.000000000000000000
@@ -79,5 +79,17 @@ object frmSampleDialog4D: TfrmSampleDialog4D
     TabOrder = 0
     Text = 'Question'
     OnClick = btnQuestionClick
+  end
+  object btnLoading: TButton
+    StyledSettings = [Size, Style, FontColor]
+    Position.X = 40.000000000000000000
+    Position.Y = 176.000000000000000000
+    Size.Width = 129.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Loading Show'
+    TextSettings.Font.Family = 'Asap'
+    OnClick = btnLoadingClick
   end
 end

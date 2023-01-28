@@ -7,6 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Edit,
   FMX.StdCtrls, FMX.Controls.Presentation,
   Dialogs4D.Interfaces,
+  Dialogs4D.Loading,
   Dialogs4D.FancyDialog;
 type
   TfrmSampleDialog4D = class(TForm)
@@ -17,12 +18,15 @@ type
     Label2: TLabel;
     btnError: TButton;
     btnQuestion: TButton;
+    btnLoading: TButton;
     procedure btnSuccessClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnErrorClick(Sender: TObject);
     procedure btnQuestionClick(Sender: TObject);
+    procedure btnLoadingClick(Sender: TObject);
   private
     FDialog: IDialog4D;
+    FLoading: IDialogLoading;
 
     procedure OnClickYes(ASender: TObject);
     procedure OnClickNo(ASender: TObject);
@@ -45,6 +49,13 @@ begin
     .Title('Teste')
     .Message('Olá')
     .TextPrimaryButton('OK')
+    .Show;
+end;
+
+procedure TfrmSampleDialog4D.btnLoadingClick(Sender: TObject);
+begin
+  FLoading
+    .Message('Loading...')
     .Show;
 end;
 
@@ -78,6 +89,8 @@ procedure TfrmSampleDialog4D.FormCreate(Sender: TObject);
 begin
   FDialog := TDialogs4DFancyDialog.New;
   FDialog.Component(Self);
+  FLoading := TDialogs4DLoading.New;
+  FLoading.Form(Self);
 end;
 
 procedure TfrmSampleDialog4D.OnClickNo(ASender: TObject);
