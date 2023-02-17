@@ -8,6 +8,7 @@ uses
   Dialogs4D.Interfaces,
   System.SysUtils,
   System.UITypes,
+  System.Classes,
   FMX.Types,
   FMX.Controls,
   FMX.StdCtrls,
@@ -25,11 +26,16 @@ type
   private
     FForm: TForm;
     FMessage: string;
+    FMessageDetail: string;
+    FHeigth: Single;
+    FWidth: Single;
+    FColor: TAlphaColor;
     FFontName: TFontName;
     FLayout: TLayout;
     FBackground: TRectangle;
     FArc: TArc;
     FLabelMessage: TLabel;
+    FLabelDetail: TLabel;
     FAnimation: TFloatAnimation;
 
     procedure DestroyComponents;
@@ -38,10 +44,15 @@ type
     procedure CreateArc;
     procedure CreateAnimation;
     procedure CreateLabel;
+    procedure CreateLabelDetail;
   protected
     function Form(AValue: TForm): IDialogLoading;
     function FontName(AValue: TFontName): IDialogLoading;
     function Message(AValue: string): IDialogLoading;
+    function DetailMessage(AValue: string): IDialogLoading;
+    function Color(AValue: TAlphaColor): IDialogLoading;
+    function Heigth(AValue: Single): IDialogLoading;
+    function Width(AValue: Single): IDialogLoading;
     function Show: IDialogLoading;
     function Hide: IDialogLoading;
   public
@@ -62,7 +73,13 @@ begin
   begin
     try
       if Assigned(FLabelMessage) then
-        FLabelMessage.Text := AValue;
+      begin
+        TThread.Synchronize(TThread.CurrentThread,
+          procedure
+          begin
+            FLabelMessage.Text := AValue;
+          end);
+      end;
     except
     end;
   end;
@@ -93,7 +110,7 @@ begin
     FLabelMessage := TLabel.Create(nil);
     FLabelMessage.Parent := FLayout;
     FLabelMessage.Align := TAlignLayout.Center;
-    FLabelMessage.Margins.Top := 60;
+    FLabelMessage.Margins.Top := FArc.Height + 100;
     FLabelMessage.Font.Size := 13;
     FLabelMessage.Font.Family := FFontName;
     FLabelMessage.Height := 70;
@@ -110,9 +127,41 @@ begin
   end;
 end;
 
+procedure TDialogs4DLoading.CreateLabelDetail;
+begin
+  if not Assigned(FLabelDetail) then
+  begin
+    FLabelDetail := TLabel.Create(nil);
+    FLabelDetail.Parent := FLayout;
+    FLabelDetail.Align := TAlignLayout.Center;
+    FLabelDetail.Margins.Top := FLabelMessage.Margins.Top + 50;
+    FLabelDetail.Font.Size := 13;
+    FLabelDetail.Font.Family := FFontName;
+    FLabelDetail.Height := 70;
+    FLabelDetail.Width := FForm.Width - 100;
+    FLabelDetail.FontColor := 4294901759;
+    FLabelDetail.TextSettings.HorzAlign := TTextAlign.Center;
+    FLabelDetail.TextSettings.VertAlign := TTextAlign.Leading;
+    FLabelDetail.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
+    FLabelDetail.Text := FMessageDetail;
+    FLabelDetail.VertTextAlign := TTextAlign.Leading;
+    FLabelDetail.Trimming := TTextTrimming.None;
+    FLabelDetail.TabStop := False;
+  end;
+end;
+
+function TDialogs4DLoading.Color(AValue: TAlphaColor): IDialogLoading;
+begin
+  Result := Self;
+  FColor := AValue;
+end;
+
 constructor TDialogs4DLoading.Create;
 begin
-  FFontName := 'Asap';
+  FFontName := 'Roboto';
+  FWidth := 25;
+  FHeigth := 25;
+  FColor := 4294901759;
 end;
 
 procedure TDialogs4DLoading.CreateAnimation;
@@ -140,14 +189,15 @@ begin
     FArc.Visible := True;
     FArc.Parent := FLayout;
     FArc.Align := TAlignLayout.Center;
-    FArc.Margins.Bottom := 55;
-    FArc.Width := 25;
-    FArc.Height := 25;
-    FArc.EndAngle := 280;
-    FArc.Stroke.Color := 4294901759;
-    FArc.Stroke.Thickness := 2;
-    FArc.Position.X := trunc((FLayout.Width - FArc.Width) / 2);
-    FArc.Position.Y := 0;
+//    FArc.Margins.Bottom := 55;
+    FArc.Width := FWidth;
+    FArc.Height := FHeigth;
+    FArc.EndAngle := 300;
+    FArc.Stroke.Color := FColor;
+    FArc.Stroke.Thickness := 3;
+    FArc.BringToFront;
+//    FArc.Position.X := trunc((FLayout.Width - FArc.Width) / 2);
+//    FArc.Position.Y := 0;
   end;
 end;
 
@@ -188,6 +238,8 @@ begin
     if Assigned(FLayout) then
     begin
       try
+        if Assigned(FLabelDetail) then
+          FLabelDetail.DisposeOf;
         if Assigned(FLabelMessage) then
           FLabelMessage.DisposeOf;
         if Assigned(FAnimation) then
@@ -202,12 +254,39 @@ begin
       end;
     end;
   finally
+    FLabelDetail := nil;
     FLabelMessage := nil;
     FAnimation := nil;
     FArc := nil;
     FBackground := nil;
     FLayout := nil;
   end;
+end;
+
+function TDialogs4DLoading.DetailMessage(AValue: string): IDialogLoading;
+begin
+  Result := Self;
+  FMessageDetail := AValue;
+  if Assigned(FLayout) then
+  begin
+    try
+      if Assigned(FLabelDetail) then
+      begin
+        TThread.Synchronize(TThread.CurrentThread,
+          procedure
+          begin
+            FLabelDetail.Text := AValue;
+          end);
+      end;
+    except
+    end;
+  end;
+end;
+
+function TDialogs4DLoading.Heigth(AValue: Single): IDialogLoading;
+begin
+  Result := Self;
+  FHeigth := AValue;
 end;
 
 function TDialogs4DLoading.Hide: IDialogLoading;
@@ -229,6 +308,7 @@ begin
   CreateArc;
   CreateAnimation;
   CreateLabel;
+  CreateLabelDetail;
 
   FBackground.AnimateFloat('Opacity', 0.7);
   FLayout.AnimateFloat('Opacity', 1);
@@ -239,6 +319,12 @@ begin
   if (LService <> nil) then
     LService.HideVirtualKeyboard;
   LService := nil;
+end;
+
+function TDialogs4DLoading.Width(AValue: Single): IDialogLoading;
+begin
+  Result := Self;
+  FWidth := AValue;
 end;
 
 end.

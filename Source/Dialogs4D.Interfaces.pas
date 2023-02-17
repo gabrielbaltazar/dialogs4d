@@ -39,6 +39,10 @@ type
     function Form(AValue: TForm): IDialogLoading;
     function FontName(AValue: TFontName): IDialogLoading;
     function Message(AValue: string): IDialogLoading;
+    function DetailMessage(AValue: string): IDialogLoading;
+    function Color(AValue: TAlphaColor): IDialogLoading;
+    function Heigth(AValue: Single): IDialogLoading;
+    function Width(AValue: Single): IDialogLoading;
     function Show: IDialogLoading;
     function Hide: IDialogLoading;
   end;
