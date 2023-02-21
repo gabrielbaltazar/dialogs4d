@@ -310,8 +310,10 @@ begin
   CreateLabel;
   CreateLabelDetail;
 
-  FBackground.AnimateFloat('Opacity', 0.7);
-  FLayout.AnimateFloat('Opacity', 1);
+  TAnimator.AnimateFloat(FBackground, 'Opacity', 0.7);
+//  FBackground.AnimateFloat('Opacity', 0.7);
+  TAnimator.AnimateFloat(FLayout, 'Opacity', 1);
+//  FLayout.AnimateFloat('Opacity', 1);
   FLayout.BringToFront;
 
   TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService,
